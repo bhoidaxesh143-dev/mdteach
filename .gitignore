@@ -1,0 +1,43 @@
+# --- Environment / Secrets ---
+.env
+.env.*
+/auth.json
+*.key
+Homestead.json
+Homestead.yaml
+
+# --- Dependencies ---
+/node_modules
+/vendor
+
+# --- Build Assets ---
+/public/build
+/public/hot
+/public/storage
+npm-debug.log
+yarn-error.log
+
+# --- Storage & Framework Cache ---
+/storage/logs/*
+/storage/framework/cache/*
+/storage/framework/sessions/*
+/storage/framework/views/*
+/storage/pail
+/bootstrap/cache/*
+
+# --- Testing ---
+.phpunit.result.cache
+/.phpunit.cache
+
+# --- Editor & IDE Folders ---
+/.fleet
+/.idea
+/.nova
+/.vscode
+/.zed
+.phpactor.json
+
+# --- OS Generated Files ---
+.DS_Store
+Thumbs.db
+*.log

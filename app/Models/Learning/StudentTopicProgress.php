@@ -1,0 +1,36 @@
+<?php
+
+namespace App\Models\Learning;
+
+use Illuminate\Database\Eloquent\Model;
+
+class StudentTopicProgress extends Model
+{
+    protected $fillable = [
+        'student_id',
+        'topic_id',
+        'is_completed',
+        'time_spent_seconds',
+        'last_read_at',
+    ];
+
+    protected $casts = [
+        'is_completed' => 'boolean',
+        'last_read_at' => 'datetime',
+    ];
+     public function topic()
+    {
+        return $this->belongsTo(
+            Topic::class,
+            'topic_id'
+        );
+    }
+
+    public function student()
+    {
+        return $this->belongsTo(
+            \App\Models\User::class,
+            'student_id'
+        );
+    }
+}
