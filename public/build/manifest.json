@@ -433,7 +433,7 @@
     ]
   },
   "resources/js/Pages/Admin/Questions/Create.vue": {
-    "file": "assets/Create-Cfs_dlKh.js",
+    "file": "assets/Create-DXk4PEAY.js",
     "name": "Create",
     "src": "resources/js/Pages/Admin/Questions/Create.vue",
     "isDynamicEntry": true,
@@ -521,7 +521,7 @@
     ]
   },
   "resources/js/Pages/Admin/TopicContents/Edit.vue": {
-    "file": "assets/Edit-DKohes6V.js",
+    "file": "assets/Edit-BQumI-rb.js",
     "name": "Edit",
     "src": "resources/js/Pages/Admin/TopicContents/Edit.vue",
     "isDynamicEntry": true,
@@ -858,7 +858,7 @@
     ]
   },
   "resources/js/app.js": {
-    "file": "assets/app-Be1gFMWj.js",
+    "file": "assets/app-D9YfdTVf.js",
     "name": "app",
     "src": "resources/js/app.js",
     "isEntry": true,
