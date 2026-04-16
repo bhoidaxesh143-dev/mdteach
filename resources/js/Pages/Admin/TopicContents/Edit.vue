@@ -251,8 +251,8 @@ plugins: [
                 <div class="overflow-hidden border rounded-xl">
                     <ckeditor
                         :editor="editor"
-                        :config="editorConfig"
                         v-model="form.content_html"
+                        :config="editorConfig"
                     />
                 </div>
 
