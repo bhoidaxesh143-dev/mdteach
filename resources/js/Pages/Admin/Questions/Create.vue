@@ -249,25 +249,25 @@ const submit = () => {
 
 <template>
 <AdminLayout>
-<div class="max-w-6xl mx-auto px-4">
+<div class="max-w-6xl px-4 mx-auto">
 
-    <div class="bg-white rounded-2xl shadow-xl border overflow-hidden">
+    <div class="overflow-hidden bg-white border shadow-xl rounded-2xl">
 
         <!-- Header -->
-        <div class="bg-gradient-to-r from-blue-600 to-indigo-600 px-8 py-6">
-            <div class="flex flex-col md:flex-row md:justify-between md:items-center gap-4">
+        <div class="px-8 py-6 bg-gradient-to-r from-blue-600 to-indigo-600">
+            <div class="flex flex-col gap-4 md:flex-row md:justify-between md:items-center">
                 <div>
                     <h1 class="text-2xl font-bold text-white">
                         Add Question
                     </h1>
-                    <p class="text-blue-100 text-sm">
+                    <p class="text-sm text-blue-100">
                         Create exam question with options and explanation
                     </p>
                 </div>
 
                 <Link
                     :href="`/admin/exams/${examId}/questions`"
-                    class="bg-white/20 text-white px-4 py-2 rounded-xl"
+                    class="px-4 py-2 text-white bg-white/20 rounded-xl"
                 >
                     ← Back
                 </Link>
@@ -277,11 +277,11 @@ const submit = () => {
         <form @submit.prevent="submit" class="p-8 space-y-8">
 
             <!-- Meta -->
-            <div class="grid md:grid-cols-3 gap-6">
+            <div class="grid gap-6 md:grid-cols-3">
 
                 <div>
-                    <label class="font-semibold block mb-2">Subject</label>
-                    <select v-model="form.subject_id" class="w-full border rounded-xl p-3">
+                    <label class="block mb-2 font-semibold">Subject</label>
+                    <select v-model="form.subject_id" class="w-full p-3 border rounded-xl">
                         <option value="">Select Subject</option>
                         <option
                             v-for="subject in subjects"
@@ -291,28 +291,28 @@ const submit = () => {
                             {{ subject.name }}
                         </option>
                     </select>
-                    <p v-if="form.errors.subject_id" class="text-red-500 text-sm mt-2">
+                    <p v-if="form.errors.subject_id" class="mt-2 text-sm text-red-500">
                         {{ form.errors.subject_id }}
                     </p>
                 </div>
 
                 <div>
-                    <label class="font-semibold block mb-2">Question Type</label>
-                    <select v-model="form.type" class="w-full border rounded-xl p-3">
+                    <label class="block mb-2 font-semibold">Question Type</label>
+                    <select v-model="form.type" class="w-full p-3 border rounded-xl">
                         <option value="single_choice">Single Choice</option>
                         <option value="multiple_choice">Multiple Choice</option>
                     </select>
                 </div>
 
                 <div>
-                    <label class="font-semibold block mb-2">Marks</label>
+                    <label class="block mb-2 font-semibold">Marks</label>
                     <input
                         v-model="form.marks"
                         type="number"
                         step="0.25"
-                        class="w-full border rounded-xl p-3"
+                        class="w-full p-3 border rounded-xl"
                     />
-                    <p v-if="form.errors.marks" class="text-red-500 text-sm mt-2">
+                    <p v-if="form.errors.marks" class="mt-2 text-sm text-red-500">
                         {{ form.errors.marks }}
                     </p>
                 </div>
@@ -321,9 +321,9 @@ const submit = () => {
 
             <!-- Question -->
             <div>
-                <label class="font-semibold block mb-3">Question</label>
+                <label class="block mb-3 font-semibold">Question</label>
 
-                <div class="border rounded-xl overflow-hidden">
+                <div class="overflow-hidden border rounded-xl">
                     <ckeditor
                         :editor="editor"
                         v-model="form.question"
@@ -331,7 +331,7 @@ const submit = () => {
                     />
                 </div>
 
-                <p v-if="form.errors.question" class="text-red-500 text-sm mt-2">
+                <p v-if="form.errors.question" class="mt-2 text-sm text-red-500">
                     {{ form.errors.question }}
                 </p>
             </div>
@@ -344,13 +344,13 @@ const submit = () => {
                     <button
                         type="button"
                         @click="addOption"
-                        class="bg-blue-600 text-white px-4 py-2 rounded-xl"
+                        class="px-4 py-2 text-white bg-blue-600 rounded-xl"
                     >
                         + Add Option
                     </button>
                 </div>
 
-                <p v-if="form.errors.options" class="text-red-500 text-sm mb-3">
+                <p v-if="form.errors.options" class="mb-3 text-sm text-red-500">
                     {{ form.errors.options }}
                 </p>
 
@@ -358,13 +358,13 @@ const submit = () => {
                     <div
                         v-for="(option, index) in form.options"
                         :key="index"
-                        class="border rounded-2xl p-4 bg-slate-50"
+                        class="p-4 border rounded-2xl bg-slate-50"
                     >
-                        <div class="flex gap-4 items-center">
+                        <div class="flex items-center gap-4">
 
                             <input
                                 v-model="option.text"
-                                class="flex-1 border rounded-xl p-3"
+                                class="flex-1 p-3 border rounded-xl"
                                 :placeholder="`Option ${index + 1}`"
                             />
 
@@ -384,7 +384,7 @@ const submit = () => {
                             <button
                                 type="button"
                                 @click="removeOption(index)"
-                                class="text-red-600 font-bold text-lg"
+                                class="text-lg font-bold text-red-600"
                             >
                                 ✕
                             </button>
@@ -396,11 +396,11 @@ const submit = () => {
 
             <!-- Explanation -->
             <div>
-                <label class="font-semibold block mb-3">
+                <label class="block mb-3 font-semibold">
                     Explanation / Solution
                 </label>
 
-                <div class="border rounded-xl overflow-hidden">
+                <div class="overflow-hidden border rounded-xl">
                     <ckeditor
                         :editor="editor"
                         v-model="form.explanation"
@@ -408,7 +408,7 @@ const submit = () => {
                     />
                 </div>
 
-                <p v-if="form.errors.explanation" class="text-red-500 text-sm mt-2">
+                <p v-if="form.errors.explanation" class="mt-2 text-sm text-red-500">
                     {{ form.errors.explanation }}
                 </p>
             </div>
@@ -416,7 +416,7 @@ const submit = () => {
             <!-- Submit -->
             <button
                 :disabled="form.processing"
-                class="w-full bg-gradient-to-r from-green-600 to-emerald-600 text-white py-4 rounded-xl font-semibold disabled:opacity-50"
+                class="w-full py-4 font-semibold text-white bg-gradient-to-r from-green-600 to-emerald-600 rounded-xl disabled:opacity-50"
             >
                 {{ form.processing ? 'Saving Question...' : 'Save Question' }}
             </button>
