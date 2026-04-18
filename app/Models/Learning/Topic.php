@@ -44,12 +44,10 @@ class Topic extends Model
         )->orderBy('sort_order');
     }
 
-    public function content()
-    {
-        return $this->hasOne(
-            TopicContent::class
-        );
-    }
+public function content()
+{
+    return $this->hasOne(TopicContent::class)->withDefault();
+}
 
     public function questions()
     {

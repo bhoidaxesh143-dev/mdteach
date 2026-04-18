@@ -37,15 +37,14 @@ class TopicContentController extends Controller
     /**
      * Show edit form
      */
-    public function edit(int $topicId)
-    {
-        $topic = Topic::with('content')
-            ->findOrFail($topicId);
+public function edit(int $topicId)
+{
+    $topic = Topic::with('content')->findOrFail($topicId);
 
-        return Inertia::render('Admin/TopicContents/Edit', [
-            'topic' => $topic
-        ]);
-    }
+    return Inertia::render('Admin/TopicContents/Edit', [
+        'topic' => $topic ?? new Topic()
+    ]);
+}
 
     /**
      * Update / Create topic content

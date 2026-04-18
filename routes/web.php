@@ -25,6 +25,7 @@ use App\Http\Controllers\Admin\{
     TopicContentController,
     TopicController,
     TopicQuestionMapController,
+    UploadController,
     UserController
 };
 
@@ -247,7 +248,10 @@ Route::post(
                     ->name('results.pdf.exam');
             });
 
-    });
+
+            });
+
+            Route::post('/admin/upload-image', [UploadController::class, 'store']);
 
 /*
 |--------------------------------------------------------------------------
