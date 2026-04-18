@@ -521,7 +521,7 @@
     ]
   },
   "resources/js/Pages/Admin/TopicContents/Edit.vue": {
-    "file": "assets/Edit-C0IjvO6O.js",
+    "file": "assets/Edit-BKk7o1ez.js",
     "name": "Edit",
     "src": "resources/js/Pages/Admin/TopicContents/Edit.vue",
     "isDynamicEntry": true,
@@ -817,7 +817,7 @@
     ]
   },
   "resources/js/Pages/Student/Learning/Reader.vue": {
-    "file": "assets/Reader-BaSOiHpu.js",
+    "file": "assets/Reader-DxiUlM5R.js",
     "name": "Reader",
     "src": "resources/js/Pages/Student/Learning/Reader.vue",
     "isDynamicEntry": true,
@@ -858,7 +858,7 @@
     ]
   },
   "resources/js/app.js": {
-    "file": "assets/app-CsNTi9m5.js",
+    "file": "assets/app-fDTxycwT.js",
     "name": "app",
     "src": "resources/js/app.js",
     "isEntry": true,

@@ -80,6 +80,21 @@ public function edit(int $topicId)
             ],
         ]);
 
+                 // 🔥 Find used images
+    preg_match_all('/<img[^>]+src="([^">]+)"/', $request->content_html, $matches);
+    $usedImages = $matches[1] ?? [];
+
+    // 🔥 Delete unused
+   $allImages = glob(base_path('../public_html/uploads/*'));
+
+    foreach ($allImages as $file) {
+        $url = asset('uploads/' . basename($file));
+
+        if (!in_array($url, $usedImages)) {
+            @unlink($file);
+        }
+    }
+
         Topic::findOrFail($topicId);
 
         TopicContent::updateOrCreate(

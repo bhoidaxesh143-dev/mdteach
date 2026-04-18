@@ -254,12 +254,16 @@ simpleUpload: {
 
                     <!-- Shortcut Tips -->
                     <div>
-                        <label class="block mb-2 font-semibold">
-                            Shortcut Tips
-                        </label>
-
-                        <textarea v-model="form.shortcut_tips" rows="4" class="w-full p-4 border rounded-xl"
-                            placeholder="Optional quick tips / mnemonics / tricks..." />
+<label class="block mb-3 font-semibold">
+    Shortcut Tips (Rich Content)
+</label>
+<div class="overflow-hidden border rounded-xl">
+    <ckeditor
+        :editor="editor"
+        v-model="form.shortcut_tips"
+        :config="editorConfig"
+    />
+</div>
 
                         <p v-if="form.errors.shortcut_tips" class="mt-2 text-sm text-red-500">
                             {{ form.errors.shortcut_tips }}

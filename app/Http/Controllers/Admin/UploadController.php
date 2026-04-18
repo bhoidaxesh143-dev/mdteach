@@ -12,10 +12,20 @@ public function store(Request $request)
         'upload' => 'required|image|max:2048'
     ]);
 
-    $path = $request->file('upload')->store('uploads', 'public');
+    $file = $request->file('upload');
+    $filename = time().'_'.$file->getClientOriginalName();
+
+    // 🔥 IMPORTANT: go to public_html/uploads
+    $destination = base_path('../public_html/uploads');
+
+    if (!file_exists($destination)) {
+        mkdir($destination, 0755, true);
+    }
+
+    $file->move($destination, $filename);
 
     return response()->json([
-        'url' => asset('storage/' . $path)
+        'url' => asset('uploads/' . $filename)
     ]);
 }
 }
