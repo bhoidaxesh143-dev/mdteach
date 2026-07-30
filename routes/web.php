@@ -252,6 +252,7 @@ Route::post(
             });
 
             Route::post('/admin/upload-image', [UploadController::class, 'store']);
+            Route::post('/editor/upload', [UploadController::class, 'store'])->name('editor.upload');
 
 /*
 |--------------------------------------------------------------------------

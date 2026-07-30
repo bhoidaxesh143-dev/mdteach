@@ -33,6 +33,7 @@ import {
     ImageStyle,
     ImageResize,
     ImageUpload,
+    SimpleUploadAdapter,
     MediaEmbed,
     FontFamily,
     FontSize,
@@ -51,92 +52,20 @@ const editor = ClassicEditor
 
 /*
 |--------------------------------------------------------------------------
-| Question Editor Config (Minimal)
+| Advanced Editor Config
 |--------------------------------------------------------------------------
 */
-const questionEditorConfig = {
+const advancedEditorConfig = {
     licenseKey: 'GPL',
 
     plugins: [
-        Essentials,
-        Paragraph,
-        Heading,
-        Bold,
-        Italic,
-        Underline,
-        CKLink,
-        List,
-        Table,
-        TableToolbar,
-        FontColor,
-        Highlight,
-        Undo
-    ],
-
-    toolbar: [
-        'undo',
-        'redo',
-        '|',
-        'heading',
-        '|',
-        'bold',
-        'italic',
-        'underline',
-        '|',
-        'fontColor',
-        'highlight',
-        '|',
-        'bulletedList',
-        'numberedList',
-        '|',
-        'insertTable'
-    ]
-}
-
-/*
-|--------------------------------------------------------------------------
-| Explanation Editor Config (Advanced)
-|--------------------------------------------------------------------------
-*/
-const explanationEditorConfig = {
-    licenseKey: 'GPL',
-
-    plugins: [
-        Essentials,
-        Paragraph,
-        Heading,
-        Bold,
-        Italic,
-        Underline,
-        Strikethrough,
-        Subscript,
-        Superscript,
-        Code,
-        RemoveFormat,
-        CKLink,
-        List,
-        TodoList,
-        Alignment,
-        BlockQuote,
-        HorizontalLine,
-        CodeBlock,
-        Table,
-        TableToolbar,
-        TableProperties,
-        TableCellProperties,
-        Image,
-        ImageToolbar,
-        ImageCaption,
-        ImageStyle,
-        ImageResize,
-        ImageUpload,
-        MediaEmbed,
-        FontFamily,
-        FontSize,
-        FontColor,
-        FontBackgroundColor,
-        Highlight,
-        Undo
+        Essentials, Paragraph, Heading, Bold, Italic, Underline,
+        Strikethrough, Subscript, Superscript, Code, RemoveFormat,
+        CKLink, List, TodoList, Alignment, BlockQuote, HorizontalLine,
+        CodeBlock, Table, TableToolbar, TableProperties, TableCellProperties,
+        Image, ImageToolbar, ImageCaption, ImageStyle, ImageResize, ImageUpload,
+        SimpleUploadAdapter, MediaEmbed, FontFamily, FontSize, FontColor,
+        FontBackgroundColor, Highlight, Undo
     ],
 
     toolbar: [
@@ -149,16 +78,33 @@ const explanationEditorConfig = {
         'link','bulletedList','numberedList','todoList','|',
         'alignment','|',
         'blockQuote','horizontalLine','codeBlock','|',
-        'insertTable','mediaEmbed'
+        'insertTable','mediaEmbed','insertImage'
     ],
+
+    simpleUpload: {
+        uploadUrl: '/admin/upload-image',
+        headers: {
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || '',
+            'Accept': 'application/json'
+        },
+        withCredentials: true
+    },
+
+    image: {
+        toolbar: [
+            'imageStyle:inline',
+            'imageStyle:block',
+            'imageStyle:side',
+            '|',
+            'toggleImageCaption',
+            'imageTextAlternative'
+        ]
+    },
 
     table: {
         contentToolbar: [
-            'tableColumn',
-            'tableRow',
-            'mergeTableCells',
-            'tableProperties',
-            'tableCellProperties'
+            'tableColumn', 'tableRow', 'mergeTableCells',
+            'tableProperties', 'tableCellProperties'
         ]
     }
 }
@@ -186,10 +132,7 @@ const form = useForm({
 |--------------------------------------------------------------------------
 */
 const addOption = () => {
-    form.options.push({
-        text: '',
-        is_correct: false
-    })
+    form.options.push({ text: '', is_correct: false })
 }
 
 const removeOption = (index) => {
@@ -200,7 +143,6 @@ const removeOption = (index) => {
         })
         return
     }
-
     form.options.splice(index, 1)
 }
 
@@ -257,12 +199,8 @@ const submit = () => {
         <div class="px-8 py-6 bg-gradient-to-r from-blue-600 to-indigo-600">
             <div class="flex flex-col gap-4 md:flex-row md:justify-between md:items-center">
                 <div>
-                    <h1 class="text-2xl font-bold text-white">
-                        Add Question
-                    </h1>
-                    <p class="text-sm text-blue-100">
-                        Create exam question with options and explanation
-                    </p>
+                    <h1 class="text-2xl font-bold text-white">Add Question</h1>
+                    <p class="text-sm text-blue-100">Create exam question with options and explanation</p>
                 </div>
 
                 <Link
@@ -278,7 +216,6 @@ const submit = () => {
 
             <!-- Meta -->
             <div class="grid gap-6 md:grid-cols-3">
-
                 <div>
                     <label class="block mb-2 font-semibold">Subject</label>
                     <select v-model="form.subject_id" class="w-full p-3 border rounded-xl">
@@ -316,21 +253,18 @@ const submit = () => {
                         {{ form.errors.marks }}
                     </p>
                 </div>
-
             </div>
 
             <!-- Question -->
             <div>
                 <label class="block mb-3 font-semibold">Question</label>
-
                 <div class="overflow-hidden border rounded-xl">
                     <ckeditor
                         :editor="editor"
                         v-model="form.question"
-                        :config="questionEditorConfig"
+                        :config="advancedEditorConfig"
                     />
                 </div>
-
                 <p v-if="form.errors.question" class="mt-2 text-sm text-red-500">
                     {{ form.errors.question }}
                 </p>
@@ -340,11 +274,10 @@ const submit = () => {
             <div>
                 <div class="flex justify-between mb-4">
                     <label class="font-semibold">Options</label>
-
                     <button
                         type="button"
                         @click="addOption"
-                        class="px-4 py-2 text-white bg-blue-600 rounded-xl"
+                        class="px-4 py-2 text-white transition bg-blue-600 rounded-xl hover:bg-blue-700"
                     >
                         + Add Option
                     </button>
@@ -360,35 +293,38 @@ const submit = () => {
                         :key="index"
                         class="p-4 border rounded-2xl bg-slate-50"
                     >
-                        <div class="flex items-center gap-4">
+                        <div class="flex items-start gap-4">
+                            <div class="pt-2">
+                                <input
+                                    v-if="form.type === 'single_choice'"
+                                    type="radio"
+                                    :checked="option.is_correct"
+                                    @change="handleCorrectSelection(index)"
+                                    class="w-5 h-5 cursor-pointer"
+                                />
+                                <input
+                                    v-else
+                                    type="checkbox"
+                                    v-model="option.is_correct"
+                                    class="w-5 h-5 cursor-pointer"
+                                />
+                            </div>
 
-                            <input
-                                v-model="option.text"
-                                class="flex-1 p-3 border rounded-xl"
-                                :placeholder="`Option ${index + 1}`"
-                            />
-
-                            <input
-                                v-if="form.type === 'single_choice'"
-                                type="radio"
-                                :checked="option.is_correct"
-                                @change="handleCorrectSelection(index)"
-                            />
-
-                            <input
-                                v-else
-                                type="checkbox"
-                                v-model="option.is_correct"
-                            />
+                            <div class="flex-1 overflow-hidden bg-white border rounded-xl">
+                                <ckeditor
+                                    :editor="editor"
+                                    v-model="option.text"
+                                    :config="advancedEditorConfig"
+                                />
+                            </div>
 
                             <button
                                 type="button"
                                 @click="removeOption(index)"
-                                class="text-lg font-bold text-red-600"
+                                class="pt-2 text-lg font-bold text-red-600 hover:text-red-800"
                             >
                                 ✕
                             </button>
-
                         </div>
                     </div>
                 </div>
@@ -396,18 +332,14 @@ const submit = () => {
 
             <!-- Explanation -->
             <div>
-                <label class="block mb-3 font-semibold">
-                    Explanation / Solution
-                </label>
-
+                <label class="block mb-3 font-semibold">Explanation / Solution</label>
                 <div class="overflow-hidden border rounded-xl">
                     <ckeditor
                         :editor="editor"
                         v-model="form.explanation"
-                        :config="explanationEditorConfig"
+                        :config="advancedEditorConfig"
                     />
                 </div>
-
                 <p v-if="form.errors.explanation" class="mt-2 text-sm text-red-500">
                     {{ form.errors.explanation }}
                 </p>
@@ -416,7 +348,7 @@ const submit = () => {
             <!-- Submit -->
             <button
                 :disabled="form.processing"
-                class="w-full py-4 font-semibold text-white bg-gradient-to-r from-green-600 to-emerald-600 rounded-xl disabled:opacity-50"
+                class="w-full py-4 font-semibold text-white transition bg-gradient-to-r from-green-600 to-emerald-600 rounded-xl disabled:opacity-50 hover:from-green-700 hover:to-emerald-700"
             >
                 {{ form.processing ? 'Saving Question...' : 'Save Question' }}
             </button>

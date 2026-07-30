@@ -27,6 +27,14 @@ import {
     TableToolbar,
     TableProperties,
     TableCellProperties,
+    Image,
+    ImageToolbar,
+    ImageCaption,
+    ImageStyle,
+    ImageResize,
+    ImageUpload,
+    SimpleUploadAdapter,
+    MediaEmbed,
     FontFamily,
     FontSize,
     FontColor,
@@ -46,85 +54,20 @@ const editor = ClassicEditor
 
 /*
 |--------------------------------------------------------------------------
-| Question Editor Config
+| Advanced Editor Config
 |--------------------------------------------------------------------------
 */
-const questionEditorConfig = {
+const advancedEditorConfig = {
     licenseKey: 'GPL',
 
     plugins: [
-        Essentials,
-        Paragraph,
-        Heading,
-        Bold,
-        Italic,
-        Underline,
-        CKLink,
-        List,
-        Table,
-        TableToolbar,
-        FontColor,
-        Highlight,
-        Undo
-    ],
-
-    toolbar: [
-        'undo',
-        'redo',
-        '|',
-        'heading',
-        '|',
-        'bold',
-        'italic',
-        'underline',
-        '|',
-        'fontColor',
-        'highlight',
-        '|',
-        'bulletedList',
-        'numberedList',
-        '|',
-        'insertTable'
-    ]
-}
-
-/*
-|--------------------------------------------------------------------------
-| Explanation Editor Config
-|--------------------------------------------------------------------------
-*/
-const explanationEditorConfig = {
-    licenseKey: 'GPL',
-
-    plugins: [
-        Essentials,
-        Paragraph,
-        Heading,
-        Bold,
-        Italic,
-        Underline,
-        Strikethrough,
-        Subscript,
-        Superscript,
-        Code,
-        RemoveFormat,
-        CKLink,
-        List,
-        TodoList,
-        Alignment,
-        BlockQuote,
-        HorizontalLine,
-        CodeBlock,
-        Table,
-        TableToolbar,
-        TableProperties,
-        TableCellProperties,
-        FontFamily,
-        FontSize,
-        FontColor,
-        FontBackgroundColor,
-        Highlight,
-        Undo
+        Essentials, Paragraph, Heading, Bold, Italic, Underline,
+        Strikethrough, Subscript, Superscript, Code, RemoveFormat,
+        CKLink, List, TodoList, Alignment, BlockQuote, HorizontalLine,
+        CodeBlock, Table, TableToolbar, TableProperties, TableCellProperties,
+        Image, ImageToolbar, ImageCaption, ImageStyle, ImageResize, ImageUpload,
+        SimpleUploadAdapter, MediaEmbed, FontFamily, FontSize, FontColor,
+        FontBackgroundColor, Highlight, Undo
     ],
 
     toolbar: [
@@ -137,8 +80,35 @@ const explanationEditorConfig = {
         'link','bulletedList','numberedList','todoList','|',
         'alignment','|',
         'blockQuote','horizontalLine','codeBlock','|',
-        'insertTable'
-    ]
+        'insertTable','mediaEmbed','insertImage'
+    ],
+
+    simpleUpload: {
+        uploadUrl: '/admin/upload-image',
+        headers: {
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || '',
+            'Accept': 'application/json'
+        },
+        withCredentials: true
+    },
+
+    image: {
+        toolbar: [
+            'imageStyle:inline',
+            'imageStyle:block',
+            'imageStyle:side',
+            '|',
+            'toggleImageCaption',
+            'imageTextAlternative'
+        ]
+    },
+
+    table: {
+        contentToolbar: [
+            'tableColumn', 'tableRow', 'mergeTableCells',
+            'tableProperties', 'tableCellProperties'
+        ]
+    }
 }
 
 /*
@@ -149,6 +119,7 @@ const explanationEditorConfig = {
 const form = useForm({
     question: props.question.question,
     marks: props.question.marks,
+    type: props.question.type ?? 'single_choice',
     explanation: props.question.explanation ?? '',
 
     options: props.question.options.map(option => ({
@@ -164,9 +135,11 @@ const form = useForm({
 |--------------------------------------------------------------------------
 */
 const setCorrectOption = (selectedOption) => {
-    form.options.forEach(option => {
-        option.is_correct = option.id === selectedOption.id
-    })
+    if (form.type === 'single_choice') {
+        form.options.forEach(option => {
+            option.is_correct = option.id === selectedOption.id
+        })
+    }
 }
 
 const goBack = () => {
@@ -204,32 +177,25 @@ const submit = () => {
 
 <template>
 <AdminLayout>
-<div class="max-w-6xl mx-auto px-4">
+<div class="max-w-6xl px-4 mx-auto">
 
-    <div class="bg-white rounded-2xl shadow-xl border overflow-hidden">
+    <div class="overflow-hidden bg-white border shadow-xl rounded-2xl">
 
         <!-- Header -->
-        <div class="bg-gradient-to-r from-indigo-600 to-blue-600 px-8 py-6">
-            <div class="flex flex-col md:flex-row md:justify-between md:items-center gap-4">
-
+        <div class="px-8 py-6 bg-gradient-to-r from-indigo-600 to-blue-600">
+            <div class="flex flex-col gap-4 md:flex-row md:justify-between md:items-center">
                 <div>
-                    <h1 class="text-2xl font-bold text-white">
-                        Edit Question
-                    </h1>
-
-                    <p class="text-blue-100 text-sm">
-                        Modify question details and correct answers
-                    </p>
+                    <h1 class="text-2xl font-bold text-white">Edit Question</h1>
+                    <p class="text-sm text-blue-100">Modify question details and correct answers</p>
                 </div>
 
                 <button
                     type="button"
                     @click="goBack"
-                    class="bg-white/20 hover:bg-white/30 text-white px-4 py-2 rounded-xl transition"
+                    class="px-4 py-2 text-white transition bg-white/20 hover:bg-white/30 rounded-xl"
                 >
                     ← Back
                 </button>
-
             </div>
         </div>
 
@@ -237,49 +203,38 @@ const submit = () => {
 
             <!-- Question -->
             <div>
-                <label class="font-semibold block mb-3">
-                    Question
-                </label>
-
-                <div class="border rounded-xl overflow-hidden">
+                <label class="block mb-3 font-semibold">Question</label>
+                <div class="overflow-hidden border rounded-xl">
                     <ckeditor
                         :editor="editor"
                         v-model="form.question"
-                        :config="questionEditorConfig"
+                        :config="advancedEditorConfig"
                     />
                 </div>
-
-                <p v-if="form.errors.question" class="text-red-500 text-sm mt-2">
+                <p v-if="form.errors.question" class="mt-2 text-sm text-red-500">
                     {{ form.errors.question }}
                 </p>
             </div>
 
             <!-- Marks -->
             <div>
-                <label class="font-semibold block mb-2">
-                    Marks
-                </label>
-
+                <label class="block mb-2 font-semibold">Marks</label>
                 <input
                     type="number"
                     step="0.25"
                     min="0"
                     v-model="form.marks"
-                    class="w-full border rounded-xl px-4 py-3"
+                    class="w-full px-4 py-3 border rounded-xl"
                 />
-
-                <p v-if="form.errors.marks" class="text-red-500 text-sm mt-2">
+                <p v-if="form.errors.marks" class="mt-2 text-sm text-red-500">
                     {{ form.errors.marks }}
                 </p>
             </div>
 
             <!-- Options -->
             <div>
-                <label class="font-semibold block mb-4">
-                    Options
-                </label>
-
-                <p v-if="form.errors.options" class="text-red-500 text-sm mb-3">
+                <label class="block mb-4 font-semibold">Options</label>
+                <p v-if="form.errors.options" class="mb-3 text-sm text-red-500">
                     {{ form.errors.options }}
                 </p>
 
@@ -287,22 +242,32 @@ const submit = () => {
                     <div
                         v-for="option in form.options"
                         :key="option.id"
-                        class="border rounded-2xl p-4 bg-slate-50"
+                        class="p-4 border rounded-2xl bg-slate-50"
                     >
-                        <div class="flex gap-4 items-center">
+                        <div class="flex items-start gap-4">
+                            <div class="pt-2">
+                                <input
+                                    v-if="form.type === 'single_choice'"
+                                    type="radio"
+                                    :checked="option.is_correct"
+                                    @change="setCorrectOption(option)"
+                                    class="w-5 h-5 cursor-pointer"
+                                />
+                                <input
+                                    v-else
+                                    type="checkbox"
+                                    v-model="option.is_correct"
+                                    class="w-5 h-5 cursor-pointer"
+                                />
+                            </div>
 
-                            <input
-                                type="radio"
-                                :checked="option.is_correct"
-                                @change="setCorrectOption(option)"
-                            />
-
-                            <input
-                                v-model="option.option_text"
-                                class="flex-1 border rounded-xl px-4 py-3"
-                                placeholder="Option Text"
-                            />
-
+                            <div class="flex-1 overflow-hidden bg-white border rounded-xl">
+                                <ckeditor
+                                    :editor="editor"
+                                    v-model="option.option_text"
+                                    :config="advancedEditorConfig"
+                                />
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -310,19 +275,15 @@ const submit = () => {
 
             <!-- Explanation -->
             <div>
-                <label class="font-semibold block mb-3">
-                    Explanation / Solution
-                </label>
-
-                <div class="border rounded-xl overflow-hidden">
+                <label class="block mb-3 font-semibold">Explanation / Solution</label>
+                <div class="overflow-hidden border rounded-xl">
                     <ckeditor
                         :editor="editor"
                         v-model="form.explanation"
-                        :config="explanationEditorConfig"
+                        :config="advancedEditorConfig"
                     />
                 </div>
-
-                <p v-if="form.errors.explanation" class="text-red-500 text-sm mt-2">
+                <p v-if="form.errors.explanation" class="mt-2 text-sm text-red-500">
                     {{ form.errors.explanation }}
                 </p>
             </div>
@@ -331,7 +292,7 @@ const submit = () => {
             <button
                 type="submit"
                 :disabled="form.processing"
-                class="w-full bg-gradient-to-r from-indigo-600 to-blue-600 text-white py-4 rounded-xl font-semibold disabled:opacity-50"
+                class="w-full py-4 font-semibold text-white transition bg-gradient-to-r from-indigo-600 to-blue-600 rounded-xl disabled:opacity-50 hover:from-indigo-700 hover:to-blue-700"
             >
                 {{ form.processing ? 'Updating Question...' : 'Update Question' }}
             </button>

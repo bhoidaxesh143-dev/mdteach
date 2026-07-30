@@ -108,17 +108,17 @@ const destroyQuestion = (id) => {
 
 <template>
 <AdminLayout>
-<div class="space-y-6 max-w-7xl mx-auto px-4">
+<div class="px-4 mx-auto space-y-6 max-w-7xl">
 
     <!-- Header -->
-    <div class="flex flex-col lg:flex-row lg:justify-between lg:items-center gap-4">
+    <div class="flex flex-col gap-4 lg:flex-row lg:justify-between lg:items-center">
 
         <div>
             <h1 class="text-3xl font-bold text-slate-800">
                 Question Management
             </h1>
 
-            <p class="text-slate-500 mt-1">
+            <p class="mt-1 text-slate-500">
                 {{ exam.title }}
             </p>
         </div>
@@ -127,14 +127,14 @@ const destroyQuestion = (id) => {
 
             <button
                 @click="goBack"
-                class="px-5 py-3 rounded-xl border border-slate-300 hover:bg-slate-50 transition"
+                class="px-5 py-3 transition border rounded-xl border-slate-300 hover:bg-slate-50"
             >
                 ← Back
             </button>
 
             <Link
                 :href="`/admin/exams/${exam.id}/questions/create`"
-                class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-5 py-3 rounded-xl shadow hover:shadow-lg transition"
+                class="px-5 py-3 text-white transition shadow bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl hover:shadow-lg"
             >
                 + Add Question
             </Link>
@@ -144,20 +144,20 @@ const destroyQuestion = (id) => {
     </div>
 
     <!-- Search -->
-    <div class="bg-white rounded-2xl shadow border p-4">
+    <div class="p-4 bg-white border shadow rounded-2xl">
         <div class="relative">
 
             <input
                 v-model="search"
                 type="text"
                 placeholder="Search questions..."
-                class="w-full border rounded-xl px-4 py-3 pr-12 focus:ring-2 focus:ring-blue-500"
+                class="w-full px-4 py-3 pr-12 border rounded-xl focus:ring-2 focus:ring-blue-500"
             />
 
             <button
                 v-if="search"
                 @click="clearSearch"
-                class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-red-500"
+                class="absolute -translate-y-1/2 right-3 top-1/2 text-slate-400 hover:text-red-500"
             >
                 ✕
             </button>
@@ -171,9 +171,9 @@ const destroyQuestion = (id) => {
         <div
             v-for="question in questions.data"
             :key="question.id"
-            class="bg-white rounded-2xl shadow border p-6"
+            class="p-6 bg-white border shadow rounded-2xl"
         >
-            <div class="flex flex-col xl:flex-row xl:justify-between gap-6">
+            <div class="flex flex-col gap-6 xl:flex-row xl:justify-between">
 
                 <!-- Left -->
                 <div class="flex-1 min-w-0">
@@ -181,15 +181,15 @@ const destroyQuestion = (id) => {
                     <!-- Meta -->
                     <div class="flex flex-wrap gap-2 mb-4">
 
-                        <span class="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-xs font-semibold">
+                        <span class="px-3 py-1 text-xs font-semibold text-blue-700 bg-blue-100 rounded-full">
                             {{ question.subject?.name || 'No Subject' }}
                         </span>
 
-                        <span class="bg-purple-100 text-purple-700 px-3 py-1 rounded-full text-xs font-semibold capitalize">
+                        <span class="px-3 py-1 text-xs font-semibold text-purple-700 capitalize bg-purple-100 rounded-full">
                             {{ question.type.replace('_', ' ') }}
                         </span>
 
-                        <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-semibold">
+                        <span class="px-3 py-1 text-xs font-semibold text-green-700 bg-green-100 rounded-full">
                             {{ question.marks }} Marks
                         </span>
 
@@ -197,25 +197,25 @@ const destroyQuestion = (id) => {
 
                     <!-- Question -->
                     <div
-                        class="prose max-w-none font-medium break-words"
+                        class="font-medium prose break-words max-w-none"
                         v-html="question.question"
                     />
 
                 </div>
 
                 <!-- Actions -->
-                <div class="flex flex-row xl:flex-col gap-3 shrink-0">
+                <div class="flex flex-row gap-3 xl:flex-col shrink-0">
 
                     <Link
                         :href="`/admin/questions/${question.id}/edit`"
-                        class="px-4 py-2 rounded-xl bg-blue-50 text-blue-600 font-medium hover:bg-blue-100 transition text-center"
+                        class="px-4 py-2 font-medium text-center text-blue-600 transition rounded-xl bg-blue-50 hover:bg-blue-100"
                     >
                         Edit
                     </Link>
 
                     <button
                         @click="destroyQuestion(question.id)"
-                        class="px-4 py-2 rounded-xl bg-red-50 text-red-600 font-medium hover:bg-red-100 transition"
+                        class="px-4 py-2 font-medium text-red-600 transition rounded-xl bg-red-50 hover:bg-red-100"
                     >
                         Delete
                     </button>
@@ -225,30 +225,33 @@ const destroyQuestion = (id) => {
             </div>
 
             <!-- Options -->
-            <div class="mt-6 grid md:grid-cols-2 gap-3">
+            <div class="grid gap-3 mt-6 md:grid-cols-2">
                 <div
                     v-for="option in question.options"
                     :key="option.id"
-                    class="px-4 py-3 rounded-xl border"
+                    class="px-4 py-3 border rounded-xl"
                     :class="option.is_correct
                         ? 'bg-green-50 border-green-300 text-green-700'
                         : 'bg-slate-50 border-slate-200'"
                 >
-                    {{ option.option_text }}
+                    <div
+                        class="text-sm prose break-words max-w-none"
+                        v-html="option.option_text"
+                    />
                 </div>
             </div>
 
             <!-- Explanation -->
             <div
                 v-if="question.explanation"
-                class="mt-6 bg-blue-50 border border-blue-200 rounded-xl p-4"
+                class="p-4 mt-6 border border-blue-200 bg-blue-50 rounded-xl"
             >
-                <h4 class="font-semibold text-blue-700 mb-2">
+                <h4 class="mb-2 font-semibold text-blue-700">
                     Explanation
                 </h4>
 
                 <div
-                    class="prose max-w-none text-sm break-words"
+                    class="text-sm prose break-words max-w-none"
                     v-html="question.explanation"
                 />
             </div>
@@ -258,7 +261,7 @@ const destroyQuestion = (id) => {
         <!-- Pagination -->
         <div
             v-if="questions.links?.length"
-            class="flex flex-wrap gap-2 justify-center pt-4"
+            class="flex flex-wrap justify-center gap-2 pt-4"
         >
             <template
                 v-for="(link, index) in questions.links"
@@ -268,7 +271,7 @@ const destroyQuestion = (id) => {
                     v-if="link.url"
                     :href="link.url"
                     v-html="link.label"
-                    class="px-4 py-2 rounded-lg border text-sm"
+                    class="px-4 py-2 text-sm border rounded-lg"
                     :class="link.active
                         ? 'bg-blue-600 text-white border-blue-600'
                         : 'bg-white hover:bg-slate-50'"
@@ -277,7 +280,7 @@ const destroyQuestion = (id) => {
                 <span
                     v-else
                     v-html="link.label"
-                    class="px-4 py-2 rounded-lg border text-sm text-slate-400 bg-slate-50"
+                    class="px-4 py-2 text-sm border rounded-lg text-slate-400 bg-slate-50"
                 />
             </template>
         </div>
@@ -287,19 +290,19 @@ const destroyQuestion = (id) => {
     <!-- Empty State -->
     <div
         v-else
-        class="bg-white rounded-2xl shadow border p-12 text-center"
+        class="p-12 text-center bg-white border shadow rounded-2xl"
     >
-        <h3 class="text-lg font-semibold text-slate-700 mb-2">
+        <h3 class="mb-2 text-lg font-semibold text-slate-700">
             No Questions Found
         </h3>
 
-        <p class="text-slate-500 mb-6">
+        <p class="mb-6 text-slate-500">
             Start by adding your first question for this exam.
         </p>
 
         <Link
             :href="`/admin/exams/${exam.id}/questions/create`"
-            class="bg-blue-600 text-white px-6 py-3 rounded-xl"
+            class="px-6 py-3 text-white bg-blue-600 rounded-xl"
         >
             + Add First Question
         </Link>
