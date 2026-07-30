@@ -62,15 +62,8 @@
       "_vendor-iIfuKRdA.js"
     ]
   },
-  "_index-Djimo4bi.js": {
-    "file": "assets/index-Djimo4bi.js",
-    "name": "index",
-    "imports": [
-      "_index-tAOJxUak.js"
-    ]
-  },
-  "_index-tAOJxUak.js": {
-    "file": "assets/index-tAOJxUak.js",
+  "_index-tjZczU6B.js": {
+    "file": "assets/index-tjZczU6B.js",
     "name": "index"
   },
   "_sweetalert-DVN6D7eS.js": {
@@ -433,7 +426,7 @@
     ]
   },
   "resources/js/Pages/Admin/Questions/Create.vue": {
-    "file": "assets/Create-CsB8_SQs.js",
+    "file": "assets/Create-CVE7UbzS.js",
     "name": "Create",
     "src": "resources/js/Pages/Admin/Questions/Create.vue",
     "isDynamicEntry": true,
@@ -441,15 +434,14 @@
       "_vendor-iIfuKRdA.js",
       "_sweetalert-DVN6D7eS.js",
       "_AdminLayout-CM0tOJR-.js",
-      "_index-tAOJxUak.js",
-      "_index-Djimo4bi.js"
+      "_index-tjZczU6B.js"
     ],
     "css": [
       "assets/Create-B9PmLXCa.css"
     ]
   },
   "resources/js/Pages/Admin/Questions/Edit.vue": {
-    "file": "assets/Edit-D0PL2QUf.js",
+    "file": "assets/Edit-9Feri1-k.js",
     "name": "Edit",
     "src": "resources/js/Pages/Admin/Questions/Edit.vue",
     "isDynamicEntry": true,
@@ -457,14 +449,14 @@
       "_vendor-iIfuKRdA.js",
       "_AdminLayout-CM0tOJR-.js",
       "_sweetalert-DVN6D7eS.js",
-      "_index-tAOJxUak.js"
+      "_index-tjZczU6B.js"
     ],
     "css": [
       "assets/Create-B9PmLXCa.css"
     ]
   },
   "resources/js/Pages/Admin/Questions/Index.vue": {
-    "file": "assets/Index-BCGm-0lD.js",
+    "file": "assets/Index-w8bijs0E.js",
     "name": "Index",
     "src": "resources/js/Pages/Admin/Questions/Index.vue",
     "isDynamicEntry": true,
@@ -521,7 +513,7 @@
     ]
   },
   "resources/js/Pages/Admin/TopicContents/Edit.vue": {
-    "file": "assets/Edit-BKk7o1ez.js",
+    "file": "assets/Edit-C82YuEag.js",
     "name": "Edit",
     "src": "resources/js/Pages/Admin/TopicContents/Edit.vue",
     "isDynamicEntry": true,
@@ -529,8 +521,7 @@
       "_vendor-iIfuKRdA.js",
       "_AdminLayout-CM0tOJR-.js",
       "_sweetalert-DVN6D7eS.js",
-      "_index-tAOJxUak.js",
-      "_index-Djimo4bi.js"
+      "_index-tjZczU6B.js"
     ],
     "css": [
       "assets/Edit-koLBFRC3.css"
@@ -858,7 +849,7 @@
     ]
   },
   "resources/js/app.js": {
-    "file": "assets/app-fDTxycwT.js",
+    "file": "assets/app-CWhFjHtu.js",
     "name": "app",
     "src": "resources/js/app.js",
     "isEntry": true,
@@ -916,7 +907,7 @@
       "resources/js/Pages/Student/Revision/Dashboard.vue"
     ],
     "css": [
-      "assets/app-OIR2NEbh.css"
+      "assets/app-D-xYueXb.css"
     ],
     "assets": [
       "assets/KaTeX_AMS-Regular-BQhdFMY1.woff2",
